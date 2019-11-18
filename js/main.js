@@ -28,10 +28,21 @@ function makeGraphs(error, salaryData){
 
     var ndx = crossfilter(employmentData);
 
+    showTypeSelector(ndx);
+
     showEmploymentData(ndx);
 
     dc.renderAll();
 
+}
+
+function showTypeSelector(ndx){
+    category_dim = ndx.dimension(dc.pluck("Category"));
+    employmentType = category_dim.group();
+
+    dc.selectMenu("#typeSelector")
+    .dimension(category_dim)
+    .group(employmentType);
 }
 
 function showEmploymentData(ndx){
@@ -51,3 +62,5 @@ function showEmploymentData(ndx){
     .xAxisLabel("Sectors")
     .yAxis().ticks(7)
 }
+
+
