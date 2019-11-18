@@ -58,9 +58,10 @@ function showEmploymentData(ndx){
     .transitionDuration(500)
     .x(d3.scaleOrdinal())
     .xUnits(dc.units.ordinal)
-    .elasticY(true)
     .xAxisLabel("Sectors")
     .yAxis().ticks(7)
 }
+
+
 
 
