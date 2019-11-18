@@ -23,6 +23,10 @@ This project makes use of the following technologies:
 * d3.js, dc.js
 * Chrome developer tools
 
+## Versioning
+
+Git/GitHub have been used for versioning.
+
 # Testing
 Manual testing was conducted to ensure the graph was working correctly.
 
