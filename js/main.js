@@ -7,8 +7,8 @@ var employmentData = [
     { "Category": "Part time", "Year": "2017", "Sectors": "Electronic Eqp.", "Employees": 1778 },
     { "Category": "Full time", "Year": "2017", "Sectors": "C/E/W/W", "Employees": 14825 },
     { "Category": "Part time", "Year": "2017", "Sectors": "C/E/W/W", "Employees": 1006 },
-    { "Category": "Full time", "Year": "2017", "Sectors": "Drink and Tobacco", "Employees": 3737 },
-    { "Category": "Part time", "Year": "2017", "Sectors": "Drink and Tobacco", "Employees": 422 },
+    { "Category": "Full time", "Year": "2017", "Sectors": "Tobacco/Drinks", "Employees": 3737 },
+    { "Category": "Part time", "Year": "2017", "Sectors": "Tobacco/Drinks", "Employees": 422 },
     { "Category": "Full time", "Year": "2017", "Sectors": "Food", "Employees": 45341 },
     { "Category": "Part time", "Year": "2017", "Sectors": "Food", "Employees": 6379 },
     { "Category": "Full time", "Year": "2017", "Sectors": "Medical Eqp.", "Employees": 27642 },
@@ -20,40 +20,34 @@ var employmentData = [
 
 ];
 
-var ndx = crossfilter(employmentData);
+queue()
 
-var sectors_dim = ndx.dimension(dc.pluck("Sectors"));
+.await(makeGraphs);
 
-var sectorCategory = sectors_dim.group().reduceSum(dc.pluck("Employees"));
+function makeGraphs(error, salaryData){
 
-dc.barChart("#employmentType")
-    .width(1000)
+    var ndx = crossfilter(employmentData);
+
+    showEmploymentData(ndx);
+
+    dc.renderAll();
+
+}
+
+function showEmploymentData(ndx){
+    var sectors_dim = ndx.dimension(dc.pluck("Sectors"));
+    var employmentSector = sectors_dim.group().reduceSum(dc.pluck("Employees"));
+
+    dc.barChart("#employmentSector")
+    .width(700)
     .height(500)
-    .margins({ top: 10, right: 50, bottom: 50, left: 100 })
+    .margins({top: 10, right: 50, bottom: 40, left: 50})
     .dimension(sectors_dim)
-    .group(sectorCategory)
+    .group(employmentSector)
     .transitionDuration(500)
     .x(d3.scaleOrdinal())
     .xUnits(dc.units.ordinal)
-    .xAxisLabel("Employees")
-    .yAxis().ticks(7);
-
-var category_dim = ndx.dimension(dc.pluck("Category"));
-
-var sectorDistribution = category_dim.group().reduceSum(dc.pluck("Employees"));
-
-dc.barChart("#employmentDistribution")
-    .width(1000)
-    .height(500)
-    .margins({ top: 10, right: 50, bottom: 50, left: 100 })
-    .dimension(sectors_dim)
-    .group(sectorCategory)
-    .transitionDuration(500)
-    .x(d3.scaleOrdinal())
-    .xUnits(dc.units.ordinal)
-    .xAxisLabel("Employees")
-    .yAxis().ticks(7);
-
-
-
-dc.renderAll();
+    .elasticY(true)
+    .xAxisLabel("Sectors")
+    .yAxis().ticks(7)
+}
